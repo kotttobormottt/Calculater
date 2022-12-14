@@ -9,8 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     var isNewValue = true
-    var operation: String? = nil
-    var previousOperation: String? = nil
+    var operation: MathOperation? = nil
+    var previousOperation: MathOperation? = nil
     var result: Int = 0
     var newValue: Int = 0
 
@@ -41,15 +41,30 @@ class ViewController: UIViewController {
     @IBAction func onNine(_ sender: Any) {
         addDigit("9")
     }
+    @IBAction func onNull(_ sender: Any) {
+        addDigit("0")
+    }
     
     @IBAction func onMinus(_ sender: Any) {
-        operation = "-"
+        operation = .substract
         previousOperation = nil
         isNewValue = true
         result = getInteger()
     }
     @IBAction func onPlus(_ sender: Any) {
-        operation = "+"
+        operation = .sum
+        previousOperation = nil
+        isNewValue = true
+        result = getInteger()
+    }
+    @IBAction func onMultiply(_ sender: Any) {
+        operation = .multiply
+        previousOperation = nil
+        isNewValue = true
+        result = getInteger()
+    }
+    @IBAction func onDivide(_ sender: Any) {
+        operation = .divide
         previousOperation = nil
         isNewValue = true
         result = getInteger()
@@ -72,7 +87,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        resultLabel.text = ConstantStrings.CalculatorTitle
     }
     
     func addDigit(_ digit: String) {
@@ -97,17 +113,29 @@ class ViewController: UIViewController {
         if previousOperation != operation {
             newValue = getInteger()
         }
-        
-        if operation == "+" {
-            result += newValue
-        } else if operation == "-" {
-            result -= newValue
-        } else {
-            return
-        }
+
+        result = operation.makeOperation(result: result, newValue: newValue)
+
         previousOperation = operation
         resultLabel.text = "\(result)"
         isNewValue = true
+    }
+}
+
+enum MathOperation {
+    case sum, substract, multiply, divide
+    
+    func makeOperation(result: Int, newValue: Int) -> Int {
+        switch self {
+        case .sum:
+            return (result + newValue)
+        case .substract:
+            return (result - newValue)
+        case .multiply:
+            return (result * newValue)
+        case .divide:
+            return (result / newValue)
+        }
     }
 }
 
