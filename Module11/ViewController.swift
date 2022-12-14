@@ -11,8 +11,8 @@ class ViewController: UIViewController {
     var isNewValue = true
     var operation: MathOperation? = nil
     var previousOperation: MathOperation? = nil
-    var result: Int = 0
-    var newValue: Int = 0
+    var result: Float = 0.00
+    var newValue: Float = 0.00
 
     @IBAction func onOne(_ sender: Any) {
         addDigit("1")
@@ -44,32 +44,41 @@ class ViewController: UIViewController {
     @IBAction func onNull(_ sender: Any) {
         addDigit("0")
     }
+    @IBAction func onPoint(_ sender: Any) {
+        addDigit(".")
+    }
     
     @IBAction func onMinus(_ sender: Any) {
         operation = .substract
         previousOperation = nil
         isNewValue = true
-        result = getInteger()
+        result = getFloat()
     }
     @IBAction func onPlus(_ sender: Any) {
         operation = .sum
         previousOperation = nil
         isNewValue = true
-        result = getInteger()
+        result = getFloat()
     }
     @IBAction func onMultiply(_ sender: Any) {
         operation = .multiply
         previousOperation = nil
         isNewValue = true
-        result = getInteger()
+        result = getFloat()
     }
     @IBAction func onDivide(_ sender: Any) {
         operation = .divide
         previousOperation = nil
         isNewValue = true
-        result = getInteger()
+        result = getFloat()
     }
-
+    @IBAction func onPercent(_ sender: Any) {
+        operation = .percent
+        previousOperation = nil
+        isNewValue = true
+        result = getFloat()
+    }
+    
     @IBAction func onEqual(_ sender: Any) {
         calculate()
     }
@@ -101,8 +110,8 @@ class ViewController: UIViewController {
         resultLabel.text = digits
     }
     
-    func getInteger() -> Int {
-        return Int(resultLabel.text ?? "0") ?? 0
+    func getFloat() -> Float {
+        return Float(resultLabel.text ?? "0") ?? 0
     }
     
     func calculate() {
@@ -111,7 +120,7 @@ class ViewController: UIViewController {
         }
         
         if previousOperation != operation {
-            newValue = getInteger()
+            newValue = getFloat()
         }
 
         result = operation.makeOperation(result: result, newValue: newValue)
@@ -123,9 +132,9 @@ class ViewController: UIViewController {
 }
 
 enum MathOperation {
-    case sum, substract, multiply, divide
+    case sum, substract, multiply, divide, percent
     
-    func makeOperation(result: Int, newValue: Int) -> Int {
+    func makeOperation(result: Float, newValue: Float) -> Float {
         switch self {
         case .sum:
             return (result + newValue)
@@ -135,6 +144,8 @@ enum MathOperation {
             return (result * newValue)
         case .divide:
             return (result / newValue)
+        case .percent:
+            return (result / 100 * newValue)
         }
     }
 }
