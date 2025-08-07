@@ -1,4 +1,4 @@
-# Pet-project Calculater
+# Pet-project Calculator
 
 ## Простейший калькулятор. Проект в разработке ...
 
